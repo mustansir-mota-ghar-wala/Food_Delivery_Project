@@ -39,6 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+EXTERNALL_APPS = [
+    'food_delivery_app',
+]
+
+INSTALLED_APPS = INSTALLED_APPS + EXTERNALL_APPS
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
