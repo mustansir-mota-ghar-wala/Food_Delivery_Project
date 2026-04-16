@@ -1,127 +1,235 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% load static %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restaurants</title>
+{% block title %}Explore Restaurants | FoodDash{% endblock %}
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
+{% block extra_styles %}
+<style>
+    /* Hero Section Polish */
+    .hero-section {
+        padding: 80px 0 60px;
+        text-align: center;
+    }
+
+    .hero-section h1 {
+        font-weight: 700;
+        font-size: 3.2rem;
+        margin-bottom: 20px;
+        color: var(--text-dark);
+        letter-spacing: -1px;
+    }
+
+    .hero-section p {
+        font-size: 1.15rem;
+        color: var(--text-muted);
+        max-width: 650px;
+        margin: 0 auto 40px;
+        line-height: 1.6;
+    }
+
+    /* Decorative Search Bar (Purely Visual) */
+    .search-bar-visual {
+        max-width: 600px;
+        margin: 0 auto;
+        background: white;
+        padding: 8px;
+        border-radius: 40px;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        border: 1px solid #eee;
+    }
+
+    .search-bar-visual input {
+        flex: 1;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 40px;
+        font-size: 1rem;
+        outline: none;
+    }
+
+    .search-bar-visual .btn-search {
+        background: var(--primary-color);
+        color: white;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: var(--transition);
+    }
+
+    .search-bar-visual .btn-search:hover {
+        transform: scale(1.1);
+        box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+    }
+
+    /* Restaurant Cards Polish */
+    .restaurant-grid {
+        padding-top: 40px;
+        padding-bottom: 80px;
+    }
+
+    .restaurant-card {
+        background: var(--card-bg);
+        border: none;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+        transition: var(--transition);
+        height: 100%;
+        cursor: pointer;
+        text-decoration: none !important;
+        display: block;
+        border: 1px solid rgba(0,0,0,0.03);
+    }
+
+    .restaurant-card:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        border-color: rgba(108, 92, 231, 0.1);
+    }
+
+    .card-img-wrapper {
+        height: 220px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .card-img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .restaurant-card:hover .card-img-wrapper img {
+        transform: scale(1.08);
+    }
+
+    .category-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.95);
+        color: var(--primary-color);
+        padding: 6px 16px;
+        border-radius: 30px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .card-body {
+        padding: 24px;
+    }
+
+    .restaurant-name {
+        font-weight: 700;
+        font-size: 1.35rem;
+        margin-bottom: 8px;
+        color: var(--text-dark);
+        transition: var(--transition);
+    }
+
+    .restaurant-card:hover .restaurant-name {
+        color: var(--primary-color);
+    }
+
+    .restaurant-meta {
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        gap: 15px;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+    }
+
+    .meta-item i {
+        margin-right: 6px;
+    }
+
+    .star-rating i {
+        color: #ffb900;
+    }
+
+    .restaurant-item {
+        animation: fadeInUp 0.8s ease-out both;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
         }
-
-        .navbar {
-            background-color: #ff4d4d;
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
+    }
+</style>
+{% endblock %}
 
-        .navbar h2 {
-            margin: 0;
-        }
-
-        .logout {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 8px 12px;
-            border-radius: 5px;
-        }
-
-        .logout:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .container {
-            padding: 20px;
-        }
-
-        .title {
-            margin-bottom: 20px;
-        }
-
-        .restaurant-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: 0.3s;
-        }
-
-        .card:hover {
-            transform: scale(1.05);
-        }
-
-        .card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-        }
-
-        .card-body {
-            padding: 15px;
-        }
-
-        .card-body h3 {
-            margin: 0 0 10px 0;
-        }
-
-        .category {
-            color: gray;
-            font-size: 14px;
-        }
-
-        .empty {
-            color: gray;
-            font-size: 18px;
-        }
-    </style>
-</head>
-
-<body>
-
-    <!-- Navbar -->
-    <div class="navbar">
-        <h2>🍔 Food Delivery</h2>
-        <a href="{% url 'logout' %}" class="logout">🚪 Logout</a>
+{% block content %}
+<header class="hero-section">
+    <h1>Taste the magic of delivery.</h1>
+    <p>Hand-picked restaurants delivered fast. Discover your next favorite meal from our curated gourmet selection.</p>
+    
+    <div class="search-bar-visual">
+        <i class="fas fa-search text-muted ml-3"></i>
+        <input type="text" placeholder="Search for burgers, pizza, or sushi...">
+        <a href="#" class="btn-search"><i class="fas fa-arrow-right"></i></a>
     </div>
+</header>
 
-    <!-- Main Content -->
-    <div class="container">
-        <h2 class="title">Available Restaurants</h2>
-
-        <div class="restaurant-grid">
-
-            {% for restaurant in restaurants %}
-            <div class="card">
-                <img src="{{ restaurant.image.url }}" alt="Restaurant Image">
-
-                <div class="card-body">
-                    <h3>{{ restaurant.name }}</h3>
-                    <p class="category">{{ restaurant.category }}</p>
+<section class="restaurant-grid">
+    <div class="row">
+        {% for restaurant in restaurants %}
+        <div class="col-lg-4 col-md-6 mb-5 restaurant-item" style="animation-delay: 0.{{ forloop.counter }}s">
+            <a href="{% url 'food_item' restaurant.id %}" class="restaurant-card">
+                <div class="card-img-wrapper">
+                    <span class="category-badge">{{ restaurant.get_category_display }}</span>
+                    {% if restaurant.image %}
+                    <img src="{{ restaurant.image.url }}" alt="{{ restaurant.name }}">
+                    {% else %}
+                    <img src="https://via.placeholder.com/400x300?text=No+Image" alt="No Image">
+                    {% endif %}
                 </div>
-            </div>
-            {% empty %}
-            <p class="empty">No restaurants available</p>
-            {% endfor %}
-
+                <div class="card-body">
+                    <h3 class="restaurant-name">{{ restaurant.name }}</h3>
+                    <div class="restaurant-meta">
+                        <div class="meta-item star-rating">
+                            <i class="fas fa-star"></i>
+                            <span>4.8</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span>20-30 min</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-motorcycle"></i>
+                            <span>Free</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
         </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="fas fa-search fa-3x text-muted mb-3 opacity-25"></i>
+            <h3>No restaurants found.</h3>
+            <p>Try searching for something else or check back later!</p>
+        </div>
+        {% endfor %}
     </div>
-
-</body>
-
-</html>
+</section>
+{% endblock %}
