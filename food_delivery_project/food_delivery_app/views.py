@@ -47,7 +47,8 @@ def Login(request):
 
 @login_required(login_url='login')
 def Home(request):
-    return render(request,'home.html')
+    restaurants = Restaurant.objects.all()
+    return render(request,'home.html',{'restaurants': restaurants})
 
 def Logout(request):
     logout(request)
