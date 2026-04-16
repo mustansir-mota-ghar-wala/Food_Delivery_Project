@@ -6,11 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ restaurant.name }} | Menu</title>
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <!-- Bootstrap CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
@@ -25,7 +22,8 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url("{% static 'images/food_bg.png' %}");
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+            url("{% static 'images/food_bg.png' %}");
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -45,7 +43,7 @@
             padding: 30px;
             margin-bottom: 40px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             border: 1px solid var(--glass-border);
         }
 
@@ -80,7 +78,7 @@
             overflow: hidden;
             height: 100%;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             border: 1px solid var(--glass-border);
             display: flex;
             flex-direction: column;
@@ -88,7 +86,7 @@
 
         .food-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
         }
 
         .food-img-wrapper {
@@ -177,8 +175,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         #home-link {
@@ -189,7 +194,6 @@
 
 <body>
     <div class="container">
-        <!-- Header Section -->
         <div class="header-section position-relative">
             <a href="/home" class="back-btn"><i class="fas fa-arrow-left mr-2"></i>Back</a>
             <h1>{{ restaurant.name }}</h1>
@@ -229,7 +233,6 @@
         {% endif %}
     </div>
 
-    <!-- Bootstrap/jQuery scripts -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"></script>
 </body>
