@@ -1,5 +1,6 @@
-distlib==0.4.0
-filelock==3.25.2
-platformdirs==4.9.6
-python-discovery==1.2.2
-virtualenv==21.2.1
+asgiref==3.11.1
+Django==6.0.4
+dotenv==0.9.9
+python-dotenv==1.2.2
+sqlparse==0.5.5
+tzdata==2026.1
