@@ -15,3 +15,12 @@ class Restaurant(models.Model):
 
     def __str__(self):
         return self.name
+
+class Food_Items(models.Model):
+    restaurant = models.ForeignKey(Restaurant,on_delete=models.CASCADE,related_name='restaurant')
+    food_name = models.CharField()
+    food_description = models.TextField()
+    food_image = models.ImageField(upload_to='food_image')
+    food_price = models.IntegerField()
+    def __str__(self):
+        return self.food_name
