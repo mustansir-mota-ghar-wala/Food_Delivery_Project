@@ -1,0 +1,23 @@
+# Owner
+git init
+git add .
+git commit -m "init"
+git remote add origin <url>
+git push -u origin main
+
+# Contributor
+git clone <url>
+git checkout -b feature
+
+# Work
+git add .
+git commit -m "feature done"
+git push origin feature
+
+# Sync
+git checkout main
+git pull origin main
+
+# Update branch
+git checkout feature
+git pull origin main
