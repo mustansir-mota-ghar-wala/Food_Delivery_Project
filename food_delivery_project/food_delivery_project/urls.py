@@ -16,12 +16,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from food_delivery_app.views import Register,Login,Home,Logout
+from food_delivery_app.views import Register,Login,Home,Logout,Food_items
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('register',Register,name='register'),
     path('login',Login,name='login'),
     path('home',Home,name='home'),
-    path('logout',Logout,name='logout')
+    path('logout',Logout,name='logout'),
+    path('food/item/<int:id>',Food_items,name='food_item')
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += staticfiles_urlpatterns()

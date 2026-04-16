@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from .models import Restaurant,Food_Items
 # Create your views here
 
 def Register(request):
@@ -13,13 +14,18 @@ def Register(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
 
+        user = User.objects.filter(username=username)
+        if user.exists():
+            messages.info(request,'username already taken')
+            return redirect('register')
+
         user = User.objects.create(
             first_name = name,
             username = username,
         )
         user.set_password(password)
         user.save()
-        messages.info(request,'account created successfully')
+        messages.success(request,'account created successfully')
         return redirect('/login')
     return render(request,'register.html')
 
@@ -46,3 +52,9 @@ def Home(request):
 def Logout(request):
     logout(request)
     return redirect('/login')
+
+def Food_items(request,id):
+    restaurant = Restaurant.objects.get(id=id)
+    food_itmes = Food_Items.objects.filter(restaurant=restaurant)
+    context = {'food_item':food_itmes, 'restaurant': restaurant}
+    return render(request,'food_items.html',context)
