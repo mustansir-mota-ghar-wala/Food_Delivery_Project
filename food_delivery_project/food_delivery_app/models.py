@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 # Create your models here.
 class Restaurant(models.Model):
     CATEGORY_CHOICES = [
@@ -24,3 +24,10 @@ class Food_Items(models.Model):
     food_price = models.IntegerField()
     def __str__(self):
         return self.food_name
+
+class Cart(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    restaurant = models.ForeignKey(Restaurant,on_delete=models.CASCADE)
+    food_item = models.ForeignKey(Food_Items,on_delete=models.CASCADE)
+    food_item_quantity = models.IntegerField(default=1)
+    food_item_total = models.IntegerField()

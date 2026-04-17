@@ -36,7 +36,7 @@
         border-radius: 40px;
         display: flex;
         align-items: center;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
         border: 1px solid #eee;
     }
 
@@ -84,7 +84,7 @@
         cursor: pointer;
         text-decoration: none !important;
         display: block;
-        border: 1px solid rgba(0,0,0,0.03);
+        border: 1px solid rgba(0, 0, 0, 0.03);
     }
 
     .restaurant-card:hover {
@@ -171,6 +171,7 @@
             opacity: 0;
             transform: translateY(30px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -183,7 +184,7 @@
 <header class="hero-section">
     <h1>Taste the magic of delivery.</h1>
     <p>Hand-picked restaurants delivered fast. Discover your next favorite meal from our curated gourmet selection.</p>
-    
+
     <div class="search-bar-visual">
         <i class="fas fa-search text-muted ml-3"></i>
         <input type="text" placeholder="Search for burgers, pizza, or sushi...">
@@ -194,7 +195,7 @@
 <section class="restaurant-grid">
     <div class="row">
         {% for restaurant in restaurants %}
-        <div class="col-lg-4 col-md-6 mb-5 restaurant-item" style="animation-delay: 0.{{ forloop.counter }}s">
+        <div class="col-lg-4 col-md-6 mb-5 restaurant-item" style="animation-delay: {{ forloop.counter }}00ms">
             <a href="{% url 'food_item' restaurant.id %}" class="restaurant-card">
                 <div class="card-img-wrapper">
                     <span class="category-badge">{{ restaurant.get_category_display }}</span>
