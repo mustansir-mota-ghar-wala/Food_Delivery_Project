@@ -14,9 +14,10 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from unicodedata import name
 from django.contrib import admin
 from django.urls import path
-from food_delivery_app.views import Register,Login,Home,Logout,Food_items
+from food_delivery_app.views import Register,Login,Home,Logout,Food_items,cart,add_to_cart,remove_cart_item,decrease_quantity,increase_quantity
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -31,7 +32,13 @@ urlpatterns = [
     path('login',Login,name='login'),
     path('home',Home,name='home'),
     path('logout',Logout,name='logout'),
-    path('food/item/<int:id>',Food_items,name='food_item')
+    path('food/item/<int:id>',Food_items,name='food_item'),
+    path('cart/', cart, name='cart'),
+    path('cart/add/<int:id>/', add_to_cart, name='add_to_cart'),
+    path('cart/remove/<int:id>/', remove_cart_item, name='remove_cart_item'),
+    path('decrease/quantity/<int:id>',decrease_quantity,name='decrease_quantity'),
+    path('increase/quantity/<int:id>',increase_quantity,name='increase_quantity'),
+
 ]
 
 if settings.DEBUG:

@@ -1,240 +1,297 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}{{ restaurant.name }} | Menu{% endblock %}
+{% block title %}{{ restaurant.name }} | Gourmet Selection{% endblock %}
 
-{% block extra_styles %}
+{% block full_width %}
 <style>
-    /* Category Header Polish */
-    .header-section {
-        background: var(--glass-bg);
-        backdrop-filter: blur(15px);
-        border-radius: 24px;
-        padding: 40px;
-        margin-bottom: 50px;
-        margin-top: 30px;
-        text-align: center;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-        border: 1px solid var(--glass-border);
+    /* PROFESSIONAL MINIMALIST DASHBOARD (30/70) */
+    .dashboard-wrapper {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        height: calc(100vh - 75px);
+        width: 100vw;
+        background: #fdfdfd; 
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Minimal Explorer Column (Strict 30%) - SOFT DIFFERENTIATION */
+    .explorer-column {
+        flex: 0 0 30% !important;
+        max-width: 30% !important;
+        background: #f4f6f8; /* Deeper Professional Grey */
+        border-right: 1px solid rgba(0,0,0,0.08);
+        overflow-y: auto;
+        padding: 30px 25px;
+        scrollbar-width: thin;
+        box-shadow: 15px 0 40px rgba(0,0,0,0.03); /* Elevation Shadow */
         position: relative;
-        overflow: hidden;
+        z-index: 5;
     }
 
-    .header-section::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 6px;
-        background: var(--primary-color);
+    /* Minimal Menu Column (Strict 70%) - UNIFIED SITE BACKGROUND */
+    .menu-column {
+        flex: 0 0 70% !important;
+        max-width: 70% !important;
+        background: linear-gradient(rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.75)),
+                    url("{% static 'images/food_bg_light.png' %}");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        overflow-y: auto;
+        padding: 40px;
+        scrollbar-width: thin;
     }
 
-    .header-section h1 {
-        font-weight: 700;
-        color: var(--text-dark);
-        margin-bottom: 12px;
-        text-transform: uppercase;
-        letter-spacing: 3px;
-        font-size: 2rem;
-    }
-
-    .back-btn {
-        position: absolute;
-        left: 25px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: var(--accent-color);
-        text-decoration: none;
-        font-weight: 600;
-        transition: var(--transition);
-        font-size: 0.95rem;
+    /* Unified Grid Containers */
+    .res-grid-container {
         display: flex;
-        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
     }
 
-    .back-btn i {
-        background: rgba(108, 92, 231, 0.1);
-        width: 35px;
-        height: 35px;
+    .food-grid-container {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        margin-right: 10px;
-        transition: var(--transition);
+        flex-wrap: wrap;
+        gap: 24px;
     }
 
-    .back-btn:hover i {
-        background: var(--primary-color);
-        color: white;
-        transform: scale(1.1);
-    }
-
-    .back-btn:hover {
-        color: var(--text-dark);
-        text-decoration: none;
-    }
-
-    /* Food Cards Polish */
-    .food-card {
-        background: var(--card-bg);
-        backdrop-filter: blur(10px);
+    /* Professional Restaurant Card (Synchronized with Home) */
+    .showcase-card {
+        flex: 0 0 calc(50% - 8px); 
+        background: white;
         border-radius: 24px;
-        overflow: hidden;
-        height: 100%;
-        transition: var(--transition);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
-        border: 1px solid var(--glass-border);
+        padding: 14px;
+        margin-bottom: 5px;
+        transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        text-decoration: none !important;
+        border: 1px solid rgba(0,0,0,0.03);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.02);
         display: flex;
         flex-direction: column;
-    }
-
-    .food-card:hover {
-        transform: translateY(-12px);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-    }
-
-    .food-img-wrapper {
-        width: 100%;
-        height: 220px;
-        overflow: hidden;
         position: relative;
     }
 
-    .food-img-wrapper img {
+    .showcase-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(108,92,231,0.08);
+        border-color: rgba(108,92,231,0.1);
+    }
+
+    .showcase-card.active {
+        border-color: var(--primary-color);
+        border-width: 2px;
+        box-shadow: 0 10px 25px rgba(108,92,231,0.12);
+        animation: activePulse 2s infinite ease-in-out;
+    }
+
+    @keyframes activePulse {
+        0% { box-shadow: 0 5px 15px rgba(108,92,231,0.1); }
+        50% { box-shadow: 0 12px 30px rgba(108,92,231,0.25); }
+        100% { box-shadow: 0 5px 15px rgba(108,92,231,0.1); }
+    }
+
+    .showcase-card.active::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 25%;
+        height: 50%;
+        width: 4px;
+        background: var(--primary-color);
+        border-radius: 0 4px 4px 0;
+    }
+
+    .card-thumb-prof {
         width: 100%;
-        height: 100%;
+        height: 110px;
+        border-radius: 16px;
         object-fit: cover;
+        margin-bottom: 12px;
         transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
 
-    .food-card:hover .food-img-wrapper img {
-        transform: scale(1.1);
+    .showcase-card:hover .card-thumb-prof { transform: scale(1.06); }
+
+    .res-name-prof {
+        font-weight: 800;
+        font-size: 1rem;
+        color: var(--text-dark);
+        margin-bottom: 2px;
     }
 
-    .food-details {
-        padding: 24px;
-        flex-grow: 1;
+    /* Professional Menu Card (Synchronized with Home) */
+    .menu-grid-card {
+        flex: 0 0 calc(25% - 18px); 
+        background: white;
+        border-radius: 28px;
+        padding: 18px;
+        border: 1px solid rgba(0,0,0,0.03);
         display: flex;
         flex-direction: column;
+        transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.04);
     }
 
-    .food-name {
-        font-weight: 700;
-        color: var(--text-dark);
-        font-size: 1.3rem;
-        margin-bottom: 10px;
+    .menu-grid-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 45px rgba(108, 92, 231, 0.12);
     }
 
-    .food-description {
-        color: var(--text-muted);
-        font-size: 0.95rem;
-        line-height: 1.6;
-        margin-bottom: 25px;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+    .item-img-prof {
+        width: 100%;
+        height: 170px;
+        border-radius: 20px;
+        object-fit: cover;
+        margin-bottom: 18px;
+        transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
 
-    .food-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: auto;
-    }
+    .menu-grid-card:hover .item-img-prof { transform: scale(1.1); }
 
-    /* Premium Price Tag */
-    .price-tag {
-        background: rgba(0, 184, 148, 0.1);
-        color: var(--success-color);
-        padding: 6px 16px;
-        border-radius: 30px;
-        font-weight: 700;
+    .item-title-prof {
+        font-weight: 800;
         font-size: 1.2rem;
+        color: var(--text-dark);
+        margin-bottom: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        letter-spacing: -0.5px;
+    }
+
+    /* Minimal Header Highlight */
+    .res-minimal-header {
+        background: white;
+        border-radius: 28px;
+        padding: 30px;
+        margin-bottom: 45px;
+        border: 1px solid rgba(0,0,0,0.05);
         display: flex;
         align-items: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.02);
     }
 
-    .price-tag i {
-        font-size: 0.9rem;
-        margin-right: 5px;
-        opacity: 0.8;
-    }
-
-    .order-btn {
+    .btn-prof-add {
         background: var(--primary-color);
         color: white !important;
         border: none;
-        padding: 10px 24px;
-        border-radius: 12px;
-        font-weight: 600;
-        font-size: 0.95rem;
+        width: 100%;
+        padding: 10px;
+        border-radius: 14px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        margin-top: 15px;
         transition: var(--transition);
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        box-shadow: 0 4px 10px rgba(108, 92, 231, 0.2);
+        box-shadow: 0 5px 15px rgba(108, 92, 231, 0.2);
     }
 
-    .order-btn i {
-        margin-right: 8px;
-    }
-
-    .order-btn:hover {
+    .btn-prof-add:hover {
         background: var(--secondary-color);
-        transform: scale(1.05);
-        box-shadow: 0 8px 20px rgba(108, 92, 231, 0.35);
-        text-decoration: none;
+        transform: scale(1.04);
+        box-shadow: 0 8px 20px rgba(108, 92, 231, 0.3);
     }
 
-    .empty-state {
-        text-align: center;
+    .section-label {
+        font-weight: 800;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 2.5px;
+        margin-bottom: 30px;
         color: var(--text-muted);
-        padding: 120px 20px;
+        opacity: 0.5;
     }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
 </style>
-{% endblock %}
 
-{% block content %}
-<div class="header-section">
-    <a href="{% url 'home' %}" class="back-btn"><i class="fas fa-arrow-left"></i><span>Explore More</span></a>
-    <h1>{{ restaurant.name }}</h1>
-    <p class="text-muted m-0"><i class="fas fa-certificate mr-2 text-warning"></i>Official Menu • Certified Gourmet Delivery</p>
-</div>
-
-{% if food_item %}
-<div class="row pb-5">
-    {% for item in food_item %}
-    <div class="col-lg-4 col-md-6 mb-5">
-        <div class="food-card">
-            <div class="food-img-wrapper">
-                {% if item.food_image %}
-                <img src="{{ item.food_image.url }}" alt="{{ item.food_name }}">
+<div class="dashboard-wrapper">
+    <!-- Left 30%: Minimal Explorer -->
+    <div class="explorer-column">
+        <div class="section-label">
+            <i class="fas fa-th-large mr-2"></i>Discovery
+        </div>
+        
+        <div class="res-grid-container">
+            {% for res in all_restaurants %}
+            <a href="{% url 'food_item' res.id %}" class="showcase-card {% if res.id == restaurant.id %}active{% endif %}">
+                {% if res.image %}
+                <img src="{{ res.image.url }}" class="card-thumb-prof" alt="{{ res.name }}">
                 {% else %}
-                <img src="https://via.placeholder.com/400x300?text=No+Image" alt="No image">
+                <img src="https://via.placeholder.com/200x120?text=FoodDash" class="card-thumb-prof" alt="No image">
                 {% endif %}
-            </div>
-            <div class="food-details">
-                <h3 class="food-name">{{ item.food_name }}</h3>
-                <p class="food-description">{{ item.food_description }}</p>
-                <div class="food-footer">
-                    <div class="price-tag">
-                        <span>₹{{ item.food_price }}</span>
+                <div class="res-name-prof">{{ res.name }}</div>
+                <div class="text-muted small font-weight-bold">
+                    <i class="fas fa-star text-warning"></i> 4.9 • 20 MIN
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Right 70%: Professional Menu -->
+    <div class="menu-column">
+        <div class="res-minimal-header">
+            {% if restaurant.image %}
+            <img src="{{ restaurant.image.url }}" style="width: 110px; height: 110px; border-radius: 20px; object-fit: cover; margin-right: 30px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 8px 20px rgba(0,0,0,0.05);">
+            {% endif %}
+            
+            <div class="flex-grow-1">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1 class="font-weight-bold mb-1" style="font-size: 2.2rem; color: var(--text-dark); letter-spacing: -1px;">{{ restaurant.name }}</h1>
+                        <div class="small text-muted font-weight-bold">
+                            <span class="mr-3"><i class="fas fa-motorcycle text-primary mr-1"></i> FREE DELIVERY</span>
+                            <span class="mr-3"><i class="fas fa-clock text-primary mr-1"></i> 25 MIN</span>
+                            <span><i class="fas fa-certificate text-warning mr-1"></i> GOURMET CERTIFIED</span>
+                        </div>
                     </div>
-                    <a href="#" class="order-btn"><i class="fas fa-cart-plus"></i>Add</a>
                 </div>
             </div>
         </div>
+
+        {% if food_item %}
+            <div class="section-label">
+                <i class="fas fa-utensils mr-2"></i>Curated Selection
+            </div>
+            
+            <div class="food-grid-container">
+                {% for item in food_item %}
+                <div class="menu-grid-card">
+                    {% if item.food_image %}
+                    <img src="{{ item.food_image.url }}" class="item-img-prof" alt="{{ item.food_name }}">
+                    {% else %}
+                    <img src="https://via.placeholder.com/150" class="item-img-prof" alt="No image">
+                    {% endif %}
+                    
+                    <div class="item-title-prof">{{ item.food_name }}</div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="font-weight-bold" style="color: var(--primary-color); font-size: 1.25rem;">₹{{ item.food_price }}</span>
+                        <span class="text-muted small font-weight-bold">★ 4.8</span>
+                    </div>
+                    
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'add_to_cart' item.id %}" class="btn btn-prof-add">
+                            <i class="fas fa-plus mr-1"></i> ADD TO CART
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-prof-add">
+                            LOGIN TO ORDER
+                        </a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-utensils fa-5x text-muted opacity-25 mb-4"></i>
+                <h3 class="font-weight-bold">Updating Menu...</h3>
+            </div>
+        {% endif %}
     </div>
-    {% endfor %}
 </div>
-{% else %}
-<div class="empty-state">
-    <i class="fas fa-mortar-pestle fa-5x mb-4 opacity-25"></i>
-    <h3 class="font-weight-bold">Chef is currently prepping!</h3>
-    <p>We haven't uploaded items for this menu yet. Check back soon for delicious surprises.</p>
-</div>
-{% endif %}
 {% endblock %}

@@ -27,7 +27,6 @@ class Food_Items(models.Model):
 
 class Cart(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
-    restaurant = models.ForeignKey(Restaurant,on_delete=models.CASCADE)
     food_item = models.ForeignKey(Food_Items,on_delete=models.CASCADE)
     food_item_quantity = models.IntegerField(default=1)
     food_item_total = models.IntegerField()
