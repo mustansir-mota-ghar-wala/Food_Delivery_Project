@@ -16,7 +16,7 @@
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
         transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
         height: 100%;
-        border: 1px solid rgba(0,0,0,0.03);
+        border: 1px solid rgba(0, 0, 0, 0.03);
         text-decoration: none !important;
         display: flex;
         flex-direction: column;
@@ -29,6 +29,7 @@
             opacity: 0;
             transform: translateY(30px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -71,7 +72,7 @@
         font-size: 0.75rem;
         font-weight: 700;
         color: var(--primary-color);
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         text-transform: uppercase;
     }
 
@@ -141,6 +142,56 @@
         color: white;
         transform: rotate(-45deg);
     }
+
+    /* PREMIUM PILL SEARCH BAR */
+    .search-wrapper {
+        max-width: 700px;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .hero-search-bar {
+        border-radius: 50px !important;
+        padding: 30px 35px !important;
+        font-size: 1.1rem !important;
+        border: 1px solid rgba(0, 0, 0, 0.06) !important;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04) !important;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+        background: white !important;
+    }
+
+    .hero-search-bar:focus {
+        box-shadow: 0 15px 45px rgba(108, 92, 231, 0.12) !important;
+        border-color: var(--primary-color) !important;
+        transform: translateY(-2px);
+    }
+
+    .search-btn-pill {
+        position: absolute;
+        right: 8px;
+        top: 8px;
+        bottom: 8px;
+        border-radius: 40px !important;
+        padding: 0 35px !important;
+        background: var(--primary-color) !important;
+        color: white !important;
+        border: none !important;
+        font-weight: 700 !important;
+        transition: all 0.3s ease !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .search-btn-pill:hover {
+        background: var(--secondary-color) !important;
+        transform: scale(1.02);
+        box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+    }
+
+    .search-btn-pill i {
+        font-size: 1.2rem;
+    }
 </style>
 {% endblock %}
 
@@ -148,9 +199,26 @@
 <section class="restaurant-grid">
     <div class="row align-items-center mb-5">
         <div class="col-12 text-center">
-            <h1 class="font-weight-bold m-0" style="font-size: 2.8rem; letter-spacing: -1px;">Explore Restaurants</h1>
-            <p class="text-muted" style="font-size: 1.1rem;">Discover the best gourmet delivery near you</p>
+            <h1 class="font-weight-bold m-0" style="font-size: 3.2rem; letter-spacing: -2px; color: var(--text-dark);">
+                Curation <span style="color: var(--primary-color);">Excellence</span>
+            </h1>
+            <p class="text-muted mt-2" style="font-size: 1.2rem; font-weight: 500;">
+                Handpicked culinary experiences delivered to your doorstep
+            </p>
         </div>
+        <div class="col-12">
+            <div class="search-wrapper mt-4 mb-5">
+                <form method="GET" action="{% url 'home' %}" class="position-relative">
+                    <input type="text" name="search" class="form-control hero-search-bar"
+                        placeholder="What are you craving today? (e.g. Pizza, Veg, Burgers...)"
+                        value="{{ request.GET.q }}">
+                    <button class="search-btn-pill" type="submit">
+                        <i class="fas fa-search mr-2"></i> SEARCH
+                    </button>
+                </form>
+            </div>
+        </div>
+
     </div>
 
     <div class="row">
@@ -168,7 +236,9 @@
                 </div>
                 <div class="card-body">
                     <h3 class="restaurant-name">{{ restaurant.name }}</h3>
-                    <p class="text-muted small m-0"><i class="fas fa-map-marker-alt mr-2"></i>{{ restaurant.address }}</p>
+                    <p class="text-muted small m-0">
+                        <i class="fas fa-utensils mr-2"></i>{{ restaurant.get_category_display }}
+                    </p>
                     <div class="info-footer">
                         <div class="delivery-meta">
                             <i class="fas fa-motorcycle mr-1"></i>20-30 MIN • FREE

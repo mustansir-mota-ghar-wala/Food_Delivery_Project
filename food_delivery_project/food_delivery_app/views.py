@@ -1,3 +1,5 @@
+from django.template import context
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login,logout
 from django.contrib.auth import authenticate
@@ -6,7 +8,7 @@ from django.contrib import messages
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from .models import Restaurant,Food_Items,Cart
+from .models import Restaurant,Food_Items,Cart,Order,OrderItem
 from django.db.models import Sum
 # Create your views here
 
@@ -44,12 +46,19 @@ def Login(request):
             return redirect('/login')
         else:
             login(request,user)
-            return redirect('/home')
+            return redirect('/')
     return render(request,'login.html')
 
 
 def Home(request):
     restaurants = Restaurant.objects.all()
+    search = request.GET.get('search')
+    if search :
+        restaurants = restaurants.filter(
+            Q(name__icontains=search)|
+            Q(restaurant__food_name__icontains=search)|
+            Q(category__icontains=search)
+        ).distinct()
     context = {'restaurants': restaurants}
     return render(request,'home.html',context)
 
@@ -67,29 +76,6 @@ def Food_items(request,id):
         'all_restaurants': all_restaurants
     }
     return render(request,'food_items.html',context)
-
-# @login_required(login_url='login')
-# def cart(request,id):
-#     user = request.user
-#     food_item = get_object_or_404(Food_Items,id = id)
-
-#     cart = request.session.get('cart',{})
-#     id_str = str(food_item.id)
-
-#     if id_str in cart :
-#         cart[id_str]['quantity'] +=1
-#     else :
-#         cart[id_str] = {
-#             "name": food_item.food_name,
-#             "price": str(food_item.food_price),
-#             "quantity": 1,
-#             "restaurant": food_item.restaurant.name,
-#             "user": user.username,
-#         }
-#         request.session['cart'] = cart
-#     context = {'user':user}
-#     return render(request,'cart.html',context)
-
 
 @login_required(login_url='login')
 def add_to_cart(request, id):
@@ -153,3 +139,44 @@ def increase_quantity(request,id):
     cart_item.food_item_total = cart_item.food_item_quantity * cart_item.food_item.food_price
     cart_item.save()
     return redirect('cart')
+
+@login_required(login_url='login')
+def checkout(request):
+    items = Cart.objects.filter(user=request.user)
+    total = 0
+    for i in items :
+        total = total + i.food_item_total
+    final_bill = total + 50
+
+    context = {
+        'items':items,
+        'bill':final_bill
+    }
+    return render(request,'checkout.html',context)
+
+
+@login_required(login_url='login')
+def place_order(request):
+    if request.method == "POST":
+        user_address = request.POST.get('address')
+        user_cart = Cart.objects.filter(user=request.user)
+
+        total = 0
+        for i in user_cart :
+            total = total + i.food_item_total
+        total = total + 50
+
+        new_order = Order.objects.create(
+            user = request.user,
+            address = user_address,
+            total_bill = total
+        )
+
+        for item in user_cart :
+            OrderItem.objects.create(
+                order = new_order,
+                food_item = item.food_item,
+                quantity = item.food_item_quantity
+            )
+        user_cart.delete()
+        return redirect('/')

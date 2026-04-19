@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}Checkout | FoodDash{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .checkout-container {
+        padding: 50px 0;
+        animation: fadeInUp 0.8s ease-out both;
+    }
+
+    .checkout-card {
+        background: var(--card-bg);
+        backdrop-filter: blur(15px);
+        border-radius: 32px;
+        padding: 40px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--glass-border);
+    }
+
+    .address-box {
+        border-radius: 20px !important;
+        padding: 20px !important;
+        border: 1px solid rgba(0,0,0,0.08) !important;
+        transition: var(--transition);
+        font-size: 1.05rem;
+    }
+
+    .address-box:focus {
+        border-color: var(--primary-color) !important;
+        box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1) !important;
+    }
+
+    .summary-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        color: #555;
+    }
+
+    .total-bill-section {
+        border-top: 1px solid rgba(0,0,0,0.05);
+        padding-top: 25px;
+        margin-top: 20px;
+    }
+
+    .grand-total-text {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--primary-color);
+        letter-spacing: -1px;
+    }
+
+    .place-order-btn {
+        background: var(--primary-color);
+        color: white;
+        border-radius: 50px;
+        padding: 18px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: var(--transition);
+        border: none;
+        width: 100%;
+        margin-top: 20px;
+        box-shadow: 0 10px 25px rgba(108, 92, 231, 0.25);
+    }
+
+    .place-order-btn:hover {
+        background: var(--secondary-color);
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(108, 92, 231, 0.35);
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container checkout-container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="checkout-card">
+                <div class="row">
+                    <!-- Right Side: Order Info -->
+                    <div class="col-md-7 pr-md-5">
+                        <h2 class="font-weight-bold mb-4" style="letter-spacing: -1px;">Finalize Your Feast</h2>
+                        
+                        <form action="{% url 'place_order' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="form-group mb-5">
+                                <label class="font-weight-bold text-muted small text-uppercase">Delivery Address</label>
+                                <textarea name="address" class="form-control address-box" rows="4" 
+                                          placeholder="Type your full delivery address here..." required></textarea>
+                            </div>
+                            
+                            <div class="d-none d-md-block">
+                                <button type="submit" class="place-order-btn">
+                                    <i class="fas fa-check-circle mr-2"></i> CONFIRM & PLACE ORDER
+                                </button>
+                            </div>
+                    </div>
+
+                    <!-- Left Side: Pricing Summary -->
+                    <div class="col-md-5 bg-light p-4 rounded" style="border-radius: 24px !important; background: rgba(0,0,0,0.02) !important;">
+                        <h5 class="font-weight-bold mb-4">Summary</h5>
+                        
+                        <div class="item-list mb-4">
+                            {% for i in items %}
+                            <div class="summary-item">
+                                <span>{{ i.food_item.food_name }} <span class="text-muted small">x{{ i.food_item_quantity }}</span></span>
+                                <span class="font-weight-bold">₹{{ i.food_item_total }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="fee-section border-top pt-3 mb-4">
+                            <div class="summary-item small">
+                                <span>Subtotal</span>
+                                <span>₹{{ bill|add:"-50" }}</span>
+                            </div>
+                            <div class="summary-item small">
+                                <span>Delivery Fee</span>
+                                <span>₹50</span>
+                            </div>
+                        </div>
+
+                        <div class="total-bill-section">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="font-weight-bold h5 mb-0">Total Bill</span>
+                                <span class="grand-total-text">₹{{ bill }}</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Mobile Button -->
+                        <div class="d-md-none mt-4">
+                            <button type="submit" class="place-order-btn">
+                                <i class="fas fa-check-circle mr-2"></i> PLACE ORDER
+                            </button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

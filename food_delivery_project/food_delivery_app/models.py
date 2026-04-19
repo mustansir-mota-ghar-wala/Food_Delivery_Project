@@ -30,3 +30,16 @@ class Cart(models.Model):
     food_item = models.ForeignKey(Food_Items,on_delete=models.CASCADE)
     food_item_quantity = models.IntegerField(default=1)
     food_item_total = models.IntegerField()
+
+class Order(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    address = models.TextField()
+    total_bill = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return self.user.username
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order,on_delete=models.CASCADE)
+    food_item = models.ForeignKey(Food_Items,on_delete=models.CASCADE)
+    quantity = models.IntegerField()
