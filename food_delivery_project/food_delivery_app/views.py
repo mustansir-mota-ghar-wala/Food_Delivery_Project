@@ -179,4 +179,11 @@ def place_order(request):
                 quantity = item.food_item_quantity
             )
         user_cart.delete()
-        return redirect('/')
+        messages.success(request, '🎉 Order Placed Successfully! Your delicious meal is on its way.')
+        return redirect('order')
+
+@login_required(login_url='login')
+def order(request):
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    context = {'orders': orders}
+    return render(request, 'order.html', context)

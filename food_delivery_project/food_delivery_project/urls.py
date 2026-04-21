@@ -17,7 +17,7 @@ Including another URLconf
 from unicodedata import name
 from django.contrib import admin
 from django.urls import path
-from food_delivery_app.views import Register,Login,Home,Logout,Food_items,cart,add_to_cart,remove_cart_item,decrease_quantity,increase_quantity,checkout,place_order
+from food_delivery_app.views import Register,Login,Home,Logout,Food_items,cart,add_to_cart,remove_cart_item,decrease_quantity,increase_quantity,checkout,place_order,order
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -40,6 +40,7 @@ urlpatterns = [
     path('increase/quantity/<int:id>',increase_quantity,name='increase_quantity'),
     path('checkout/', checkout, name='checkout'),
     path('place-order/', place_order, name='place_order'),
+    path('order/',order,name='order')
 
 
 ]

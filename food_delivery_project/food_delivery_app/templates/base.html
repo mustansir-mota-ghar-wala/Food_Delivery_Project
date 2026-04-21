@@ -228,8 +228,21 @@
                 <ul class="navbar-nav ml-auto align-items-center">
                     {% if user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Activity</a></li>
-                    <li class="nav-item"><a class="nav-link auth-btn ml-lg-3" href="{% url 'logout' %}">Logout</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'order' %}">My Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link position-relative mr-3" href="{% url 'cart' %}">
+                            <i class="fas fa-shopping-cart" style="font-size: 1.2rem;"></i>
+                            {% if cart_count > 0 %}
+                            <span class="badge badge-pill badge-danger" 
+                                  style="position: absolute; top: -5px; right: -10px; font-size: 0.65rem; padding: 4px 6px;">
+                                {{ cart_count }}
+                            </span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link auth-btn ml-lg-2" href="{% url 'logout' %}">Logout</a></li>
                     {% else %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
                     <li class="nav-item"><a class="nav-link auth-btn ml-lg-4" href="{% url 'register' %}">Get
@@ -264,7 +277,7 @@
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-4 footer-links">
-                    <h5>Compay</h5>
+                    <h5>Company</h5>
                     <ul>
                         <li><a href="#">About Us</a></li>
                         <li><a href="#">Careers</a></li>
