@@ -11,12 +11,12 @@
 
     .restaurant-card {
         background: white;
-        border-radius: 28px;
+        border-radius: 32px;
         overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-        transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+        transition: var(--transition);
         height: 100%;
-        border: 1px solid rgba(0, 0, 0, 0.03);
+        border: 1px solid rgba(0, 0, 0, 0.04);
         text-decoration: none !important;
         display: flex;
         flex-direction: column;
@@ -27,7 +27,7 @@
     @keyframes fadeInUp {
         from {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(20px);
         }
 
         to {
@@ -37,13 +37,13 @@
     }
 
     .restaurant-card:hover {
-        transform: translateY(-12px);
-        box-shadow: 0 25px 55px rgba(108, 92, 231, 0.15);
-        border-color: rgba(108, 92, 231, 0.2);
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(108, 92, 231, 0.08);
+        border-color: rgba(108, 92, 231, 0.15);
     }
 
     .card-img-wrapper {
-        height: 230px;
+        height: 150px;
         overflow: hidden;
         position: relative;
     }
@@ -91,7 +91,7 @@
     }
 
     .card-body {
-        padding: 24px;
+        padding: 16px;
         flex-grow: 1;
         display: flex;
         flex-direction: column;
@@ -99,8 +99,8 @@
 
     .restaurant-name {
         font-weight: 800;
-        font-size: 1.4rem;
-        margin-bottom: 8px;
+        font-size: 1rem;
+        margin-bottom: 2px;
         color: var(--text-dark);
         letter-spacing: -0.5px;
     }
@@ -115,7 +115,7 @@
     }
 
     .delivery-meta {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         color: var(--text-muted);
         font-weight: 600;
     }
@@ -126,8 +126,8 @@
     }
 
     .view-arrow {
-        width: 35px;
-        height: 35px;
+        width: 30px;
+        height: 30px;
         background: #f0f0f0;
         border-radius: 50%;
         display: flex;
@@ -195,68 +195,69 @@
 </style>
 {% endblock %}
 
-{% block content %}
-<section class="restaurant-grid">
-    <div class="row align-items-center mb-5">
-        <div class="col-12 text-center">
-            <h1 class="font-weight-bold m-0" style="font-size: 3.2rem; letter-spacing: -2px; color: var(--text-dark);">
-                Curation <span style="color: var(--primary-color);">Excellence</span>
-            </h1>
-            <p class="text-muted mt-2" style="font-size: 1.2rem; font-weight: 500;">
-                Handpicked culinary experiences delivered to your doorstep
-            </p>
-        </div>
-        <div class="col-12">
-            <div class="search-wrapper mt-4 mb-5">
-                <form method="GET" action="{% url 'home' %}" class="position-relative">
-                    <input type="text" name="search" class="form-control hero-search-bar"
-                        placeholder="What are you craving today? (e.g. Pizza, Veg, Burgers...)"
-                        value="{{ request.GET.q }}">
-                    <button class="search-btn-pill" type="submit">
-                        <i class="fas fa-search mr-2"></i> SEARCH
-                    </button>
-                </form>
+{% block full_width %}
+<section class="restaurant-grid" style="padding-top: 10px;">
+    <div class="container">
+        <div class="row align-items-center mb-2">
+            <div class="col-12 text-center">
+                <h1 class="font-weight-bold m-0" style="font-size: 2.8rem; letter-spacing: -2px; color: var(--text-dark);">
+                    Curation <span style="color: var(--primary-color);">Excellence</span>
+                </h1>
+                <p class="text-muted m-0" style="font-size: 1rem; font-weight: 500;">
+                    Handpicked culinary experiences delivered to your doorstep
+                </p>
+            </div>
+            <div class="col-12">
+                <div class="search-wrapper mt-2 mb-4">
+                    <form method="GET" action="{% url 'home' %}" class="position-relative">
+                        <input type="text" name="search" class="form-control hero-search-bar"
+                            placeholder="What are you craving today? (e.g. Pizza, Veg, Burgers...)"
+                            value="{{ request.GET.q }}">
+                        <button class="search-btn-pill" type="submit">
+                            <i class="fas fa-search mr-2"></i> SEARCH
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
 
-    </div>
-
-    <div class="row">
-        {% for restaurant in restaurants %}
-        <div class="col-lg-4 col-md-6 mb-5">
-            <a href="{% url 'food_item' restaurant.id %}" class="restaurant-card">
-                <div class="card-img-wrapper">
-                    <div class="badge-overlay">{{ restaurant.get_category_display }}</div>
-                    <div class="rating-overlay"><i class="fas fa-star mr-1"></i>4.8</div>
-                    {% if restaurant.image %}
-                    <img src="{{ restaurant.image.url }}" alt="{{ restaurant.name }}">
-                    {% else %}
-                    <img src="https://via.placeholder.com/400x300?text=FoodDash" alt="No image">
-                    {% endif %}
-                </div>
-                <div class="card-body">
-                    <h3 class="restaurant-name">{{ restaurant.name }}</h3>
-                    <p class="text-muted small m-0">
-                        <i class="fas fa-utensils mr-2"></i>{{ restaurant.get_category_display }}
-                    </p>
-                    <div class="info-footer">
-                        <div class="delivery-meta">
-                            <i class="fas fa-motorcycle mr-1"></i>20-30 MIN • FREE
-                        </div>
-                        <div class="view-arrow">
-                            <i class="fas fa-arrow-right"></i>
+        <div class="row">
+            {% for restaurant in restaurants %}
+            <div class="col-lg-3 col-md-6 mb-5">
+                <a href="{% url 'food_item' restaurant.id %}" class="restaurant-card">
+                    <div class="card-img-wrapper">
+                        <div class="badge-overlay">{{ restaurant.get_category_display }}</div>
+                        <div class="rating-overlay"><i class="fas fa-star mr-1"></i>4.8</div>
+                        {% if restaurant.image %}
+                        <img src="{{ restaurant.image.url }}" alt="{{ restaurant.name }}">
+                        {% else %}
+                        <img src="https://via.placeholder.com/400x300?text=FoodDash" alt="No image">
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <h3 class="restaurant-name">{{ restaurant.name }}</h3>
+                        <p class="text-muted small m-0">
+                            <i class="fas fa-utensils mr-2"></i>{{ restaurant.get_category_display }}
+                        </p>
+                        <div class="info-footer">
+                            <div class="delivery-meta">
+                                <i class="fas fa-motorcycle mr-1"></i>20-30 MIN • FREE
+                            </div>
+                            <div class="view-arrow">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </a>
+                </a>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-store-slash fa-3x text-muted mb-3 opacity-25"></i>
+                <h3>No restaurants found.</h3>
+                <p>Our scouts are currently looking for the best kitchens in your area!</p>
+            </div>
+            {% endfor %}
         </div>
-        {% empty %}
-        <div class="col-12 text-center py-5">
-            <i class="fas fa-store-slash fa-3x text-muted mb-3 opacity-25"></i>
-            <h3>No restaurants found.</h3>
-            <p>Our scouts are currently looking for the best kitchens in your area!</p>
-        </div>
-        {% endfor %}
     </div>
 </section>
 {% endblock %}

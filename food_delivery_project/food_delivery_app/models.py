@@ -32,9 +32,14 @@ class Cart(models.Model):
     food_item_total = models.IntegerField()
 
 class Order(models.Model):
+    PAYMENT_CHOICES = [
+        ('Online', 'Online'),
+        ('COD', 'Cash on Delivery'),
+    ]
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     address = models.TextField()
     total_bill = models.IntegerField()
+    payment_method = models.CharField(max_length=20, choices=PAYMENT_CHOICES, default='COD')
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.user.username

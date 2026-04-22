@@ -15,15 +15,23 @@
         :root {
             --primary-color: #6c5ce7;
             --secondary-color: #a29bfe;
-            --bg-light: #f9f9f9;
-            --text-dark: #2d3436;
-            --text-muted: #636e72;
+            --bg-light: #f8f9fd;
+            --text-dark: #1e272e;
+            --text-muted: #808e9b;
             --card-bg: rgba(255, 255, 255, 0.95);
-            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            --glass-bg: rgba(255, 255, 255, 0.9);
-            --glass-border: rgba(255, 255, 255, 0.2);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.3);
             --accent-color: #6c5ce7;
             --success-color: #00b894;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        * {
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         /* Ultra-Minimal Professional Scrollbar */
@@ -73,60 +81,45 @@
         }
 
         .navbar-brand {
-            font-weight: 700;
-            font-size: 1.6rem;
+            font-weight: 800;
+            font-size: 1.7rem;
             color: var(--primary-color) !important;
             display: flex;
             align-items: center;
-            letter-spacing: -0.5px;
+            letter-spacing: -1px;
         }
 
         .navbar-brand i {
-            margin-right: 12px;
-            transition: var(--transition);
-        }
-
-        .navbar-brand:hover i {
-            transform: rotate(15deg) scale(1.1);
+            margin-right: 10px;
+            font-size: 1.4rem;
         }
 
         .nav-link {
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text-dark) !important;
-            margin-left: 20px;
-            position: relative;
+            margin-left: 24px;
+            font-size: 0.95rem;
             transition: var(--transition);
         }
 
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary-color);
-            transition: var(--transition);
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+            transform: translateY(-1px);
         }
 
         .auth-btn {
-            background: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), #8275e9);
             color: white !important;
-            border-radius: 30px;
-            padding: 10px 30px !important;
-            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.25);
-            font-weight: 600;
+            border-radius: 50px;
+            padding: 12px 32px !important;
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.2);
+            border: none;
         }
 
         .auth-btn:hover {
-            background: var(--secondary-color);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.4);
-            color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(108, 92, 231, 0.3);
+            background: linear-gradient(135deg, #8275e9, var(--primary-color));
         }
 
         /* Main Content wrapper */

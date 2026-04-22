@@ -5,11 +5,10 @@
 
 {% block extra_styles %}
     <style>
-        .login-wrapper {
-            min-height: calc(100vh - 120px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .login-page-container {
+            min-height: calc(100vh - 80px);
+            width: 100%;
+            padding: 80px 20px 60px;
         }
 
         .glass-card {
@@ -21,6 +20,7 @@
             border: 1px solid var(--glass-border);
             width: 100%;
             max-width: 450px;
+            margin: 0 auto !important;
         }
 
         .brand-logo {
@@ -35,10 +35,13 @@
         }
 
         .brand-logo h2 {
-            font-weight: 600;
-            color: var(--text-dark);
-            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--text-dark), var(--primary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2rem;
             margin: 0;
+            letter-spacing: -1px;
         }
 
         .form-label {
@@ -103,8 +106,8 @@
     </style>
 {% endblock %}
 
-{% block content %}
-<div class="login-wrapper">
+{% block full_width %}
+<div class="container-fluid d-flex justify-content-center align-items-center login-page-container">
     <div class="glass-card">
         <div class="brand-logo">
             <i class="fas fa-lock"></i>

@@ -4,7 +4,7 @@
 {% block extra_styles %}
 <style>
     .checkout-container {
-        padding: 50px 0;
+        padding: 80px 0 50px;
         animation: fadeInUp 0.8s ease-out both;
     }
 
@@ -74,6 +74,94 @@
         from { opacity: 0; transform: translateY(30px); }
         to { opacity: 1; transform: translateY(0); }
     }
+
+    /* Payment Styles */
+    .payment-option-card {
+        position: relative;
+        border: 2px solid rgba(0,0,0,0.05);
+        border-radius: 20px;
+        padding: 15px 20px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .payment-option-card:hover {
+        border-color: var(--primary-color);
+        background: rgba(108, 92, 231, 0.02);
+    }
+
+    .payment-option-card input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .payment-option-card input[type="radio"]:checked + label + .custom-radio {
+        border-color: var(--primary-color);
+    }
+
+    .payment-option-card label {
+        margin-bottom: 0;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .icon-circle {
+        width: 45px;
+        height: 45px;
+        background: rgba(108, 92, 231, 0.1);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-color);
+        font-size: 1.2rem;
+    }
+
+    .payment-title {
+        font-weight: 600;
+        color: var(--text-dark);
+        font-size: 1rem;
+    }
+
+    .payment-desc {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+
+    .custom-radio {
+        width: 22px;
+        height: 22px;
+        border: 2px solid rgba(0,0,0,0.1);
+        border-radius: 50%;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .payment-option-card input[type="radio"]:checked ~ label .custom-radio {
+        border-color: var(--primary-color);
+        background: var(--primary-color);
+    }
+
+    .payment-option-card input[type="radio"]:checked ~ label .custom-radio::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 8px;
+        height: 8px;
+        background: white;
+        border-radius: 50%;
+    }
+
+    .payment-option-card input[type="radio"]:checked {
+        /* No change needed here, handled by siblings */
+    }
+
+    .payment-option-card:has(input[type="radio"]:checked) {
+        border-color: var(--primary-color);
+        background: rgba(108, 92, 231, 0.05);
+    }
 </style>
 {% endblock %}
 
@@ -89,10 +177,43 @@
                         
                         <form action="{% url 'place_order' %}" method="POST">
                             {% csrf_token %}
-                            <div class="form-group mb-5">
+                            <div class="form-group mb-4">
                                 <label class="font-weight-bold text-muted small text-uppercase">Delivery Address</label>
-                                <textarea name="address" class="form-control address-box" rows="4" 
+                                <textarea name="address" class="form-control address-box" rows="3" 
                                           placeholder="Type your full delivery address here..." required></textarea>
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label class="font-weight-bold text-muted small text-uppercase mb-3 d-block">Payment Method</label>
+                                <div class="payment-options d-flex flex-column gap-3">
+                                    <div class="payment-option-card">
+                                        <input type="radio" name="payment_method" id="online" value="Online" required>
+                                        <label for="online" class="d-flex align-items-center">
+                                            <div class="icon-circle mr-3">
+                                                <i class="fas fa-credit-card"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <div class="payment-title">Online Payment</div>
+                                                <div class="payment-desc">Credit/Debit Card, UPI, Net Banking</div>
+                                            </div>
+                                            <div class="custom-radio"></div>
+                                        </label>
+                                    </div>
+
+                                    <div class="payment-option-card mt-3">
+                                        <input type="radio" name="payment_method" id="cod" value="COD" checked required>
+                                        <label for="cod" class="d-flex align-items-center">
+                                            <div class="icon-circle mr-3">
+                                                <i class="fas fa-money-bill-wave"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <div class="payment-title">Cash on Delivery</div>
+                                                <div class="payment-desc">Pay when you receive your food</div>
+                                            </div>
+                                            <div class="custom-radio"></div>
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                             
                             <div class="d-none d-md-block">

@@ -59,7 +59,7 @@ def Home(request):
             Q(restaurant__food_name__icontains=search)|
             Q(category__icontains=search)
         ).distinct()
-    context = {'restaurants': restaurants}
+    context = {'restaurants': restaurants[:12]}
     return render(request,'home.html',context)
 
 def Logout(request):
@@ -159,6 +159,7 @@ def checkout(request):
 def place_order(request):
     if request.method == "POST":
         user_address = request.POST.get('address')
+        payment_method = request.POST.get('payment_method')
         user_cart = Cart.objects.filter(user=request.user)
 
         total = 0
@@ -169,7 +170,8 @@ def place_order(request):
         new_order = Order.objects.create(
             user = request.user,
             address = user_address,
-            total_bill = total
+            total_bill = total,
+            payment_method = payment_method
         )
 
         for item in user_cart :
