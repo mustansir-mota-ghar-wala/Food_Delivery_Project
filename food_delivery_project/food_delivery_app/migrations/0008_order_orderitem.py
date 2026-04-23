@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('food_delivery_app', '0007_remove_cart_restaurant'),
+        ('food_delivery_app', '0007_alter_restaurant_category_alter_restaurant_name_cart'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
